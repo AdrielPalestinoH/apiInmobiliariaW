@@ -2,23 +2,11 @@ package com.example.inmo.mappers;
 
 
 import com.example.inmo.dto.InmuebleDTO;
-import com.example.inmo.dto.UsuarioDTO;
 import com.example.inmo.models.EstadoInmueble;
 import com.example.inmo.models.Inmueble;
 import com.example.inmo.models.TipoInmueble;
-import com.example.inmo.models.Usuario;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface UsuarioMapper {
-
-    @Mapping(source = "tipoUsuario.descripcion", target = "tipoUsuarioDescripcion")
-    UsuarioDTO toDto(Usuario usuario);
-
-    @Mapping(target = "tipoUsuario", ignore = true) // lo llenamos en servicio
-    Usuario toEntity(UsuarioDTO dto);
-    
+public class InmuebleMapper {
     public static InmuebleDTO toDTO(Inmueble inmueble) {
         InmuebleDTO dto = new InmuebleDTO();
         dto.setId(inmueble.getId());
@@ -44,5 +32,4 @@ public interface UsuarioMapper {
         inmueble.setTipoInmueble(tipo);
         return inmueble;
     }
-    
 }
