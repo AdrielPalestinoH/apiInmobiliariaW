@@ -46,6 +46,18 @@ public class InmuebleDTO {
     private LocalDateTime fechaAlta;
     private String estadoDescripcion;
     private String tipoDescripcion;
+    
+    private Long estadoId;
+    private Long tipoId;
+
+    public Long getEstadoId() { return estadoId; }
+    public void setEstadoId(Long estadoId) { this.estadoId = estadoId; }
+
+    public Long getTipoId() { return tipoId; }
+    public void setTipoId(Long tipoId) { this.tipoId = tipoId; }
+
+    
+   
 
     // Getters y Setters
 }

@@ -1,9 +1,12 @@
 package com.example.inmo.models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "inmueble")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Inmueble {
 
     @Id
@@ -20,6 +23,7 @@ public class Inmueble {
     // FK: inmueble.estado_inmueble -> estado_inmueble.id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado_inmueble")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private EstadoInmueble estadoInmueble;
 
     // FK: inmueble.tipo_inmueble -> tipo_inmueble.id

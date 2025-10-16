@@ -43,6 +43,23 @@ public class UsuarioDTO {
     private String email;
     private String cel;
     private String tipoUsuarioDescripcion;
+    
+    private Long tipoUsuarioId; // 👈 Agregado
+
+    
+    public Long getTipoUsuarioId() {
+		return tipoUsuarioId;
+	}
+	public void setTipoUsuarioId(Long tipoUsuarioId) {
+		this.tipoUsuarioId = tipoUsuarioId;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	private String pwd;
 
     // Getters y Setters
 }

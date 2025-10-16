@@ -1,21 +1,33 @@
 package com.example.inmo.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "credito_abono_detalle")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"}) 
 public class CreditoAbonoDetalle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Aunque en DB es int(11), mapeamos la relación por claridad con la tabla metodo_pago.
-    // No hay FK en el dump; si lo agregas, esto ya queda listo.
+    // 🔹 Relación correcta con detalle del crédito (pago individual)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "metodo_pago") // columna existente
+    @JoinColumn(name = "credito_detalle_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "credito"})
+    private CreditoDetalle creditoDetalle;
+
+    // 🔹 Si quieres mantener la relación con crédito completo (usa otra FK)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credito_id", nullable = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "inmueble", "usuario"})
+    private Credito credito;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "metodo_pago")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private MetodoPago metodoPago;
 
     @Column(name = "total_abonado")
@@ -26,16 +38,17 @@ public class CreditoAbonoDetalle {
 
     private String referencia;
 
-    // OJO: El dump dice que 'credito_detalle_id' referencia a credito.id
-    // Así que aquí es ManyToOne hacia Credito, con esa columna.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "credito_detalle_id")
-    private Credito credito;
-
     public CreditoAbonoDetalle() {}
 
+    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public CreditoDetalle getCreditoDetalle() { return creditoDetalle; }
+    public void setCreditoDetalle(CreditoDetalle creditoDetalle) { this.creditoDetalle = creditoDetalle; }
+
+    public Credito getCredito() { return credito; }
+    public void setCredito(Credito credito) { this.credito = credito; }
 
     public MetodoPago getMetodoPago() { return metodoPago; }
     public void setMetodoPago(MetodoPago metodoPago) { this.metodoPago = metodoPago; }
@@ -48,7 +61,4 @@ public class CreditoAbonoDetalle {
 
     public String getReferencia() { return referencia; }
     public void setReferencia(String referencia) { this.referencia = referencia; }
-
-    public Credito getCredito() { return credito; }
-    public void setCredito(Credito credito) { this.credito = credito; }
 }

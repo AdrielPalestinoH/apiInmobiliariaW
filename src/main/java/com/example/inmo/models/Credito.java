@@ -4,9 +4,13 @@ package com.example.inmo.models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "credito")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Credito {
 
     @Id
@@ -44,6 +48,7 @@ public class Credito {
 
     // Relación 1:N con CreditoDetalle (FK en credito_detalle.credito_id)
     @OneToMany(mappedBy = "credito", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference
     private List<CreditoDetalle> detalles;
 
     // Relación 1:N con CreditoAbonoDetalle (FK en credito_abono_detalle.credito_detalle_id -> credito.id)

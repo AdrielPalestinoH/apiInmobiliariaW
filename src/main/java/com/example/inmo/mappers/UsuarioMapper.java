@@ -1,11 +1,6 @@
 package com.example.inmo.mappers;
 
-
-import com.example.inmo.dto.InmuebleDTO;
 import com.example.inmo.dto.UsuarioDTO;
-import com.example.inmo.models.EstadoInmueble;
-import com.example.inmo.models.Inmueble;
-import com.example.inmo.models.TipoInmueble;
 import com.example.inmo.models.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,36 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 
+    // 🔹 Convierte de entidad → DTO
+    @Mapping(source = "tipoUsuario.id", target = "tipoUsuarioId")
     @Mapping(source = "tipoUsuario.descripcion", target = "tipoUsuarioDescripcion")
     UsuarioDTO toDto(Usuario usuario);
 
-    @Mapping(target = "tipoUsuario", ignore = true) // lo llenamos en servicio
+    // 🔹 Convierte de DTO → entidad (sin mapear tipoUsuario porque lo asignamos en el servicio)
+    @Mapping(target = "tipoUsuario", ignore = true)
     Usuario toEntity(UsuarioDTO dto);
-    
-    public static InmuebleDTO toDTO(Inmueble inmueble) {
-        InmuebleDTO dto = new InmuebleDTO();
-        dto.setId(inmueble.getId());
-        dto.setPrecio(inmueble.getPrecio());
-        dto.setDescripcion(inmueble.getDescripcion());
-        dto.setFechaAlta(inmueble.getFechaAlta());
-        dto.setEstadoDescripcion(
-            inmueble.getEstadoInmueble() != null ? inmueble.getEstadoInmueble().getDescripcion() : null
-        );
-        dto.setTipoDescripcion(
-            inmueble.getTipoInmueble() != null ? inmueble.getTipoInmueble().getDescripcion() : null
-        );
-        return dto;
-    }
-    
-    public static Inmueble toEntity(InmuebleDTO dto, EstadoInmueble estado, TipoInmueble tipo) {
-        Inmueble inmueble = new Inmueble();
-        inmueble.setId(dto.getId());
-        inmueble.setPrecio(dto.getPrecio());
-        inmueble.setDescripcion(dto.getDescripcion());
-        inmueble.setFechaAlta(dto.getFechaAlta());
-        inmueble.setEstadoInmueble(estado);
-        inmueble.setTipoInmueble(tipo);
-        return inmueble;
-    }
-    
 }
