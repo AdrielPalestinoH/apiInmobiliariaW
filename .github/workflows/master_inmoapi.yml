@@ -13,7 +13,8 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -24,10 +25,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Upload artifact
+      - name: Upload JAR for deploy
         uses: actions/upload-artifact@v4
         with:
-          name: java-app
+          name: app-jar
           path: target/ApiInmo-0.0.1-SNAPSHOT.jar
 
   deploy:
@@ -41,14 +42,14 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: java-app
+          name: app-jar
           path: .
 
-      - name: Rename and move JAR to root (optional safeguard)
+      - name: Verify JAR exists
         run: |
+          echo "Listing current directory:"
           ls -la
-          mv target/ApiInmo-0.0.1-SNAPSHOT.jar ./ApiInmo-0.0.1-SNAPSHOT.jar || true
-          ls -la
+          file ApiInmo-0.0.1-SNAPSHOT.jar || true
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -62,5 +63,4 @@ jobs:
         with:
           app-name: 'inmoapi'
           slot-name: 'Production'
-          package: ApiInmo-0.0.1-SNAPSHOT.jar
-
+          package: './ApiInmo-0.0.1-SNAPSHOT.jar'
