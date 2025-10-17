@@ -25,17 +25,17 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Prepare artifact for deploy
+      - name: Rename JAR to app.jar
         run: |
           mkdir -p deploy
-          cp target/ApiInmo-0.0.1-SNAPSHOT.jar deploy/
+          cp target/*.jar deploy/app.jar
           ls -la deploy/
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: deploy/
+          path: deploy/app.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,7 +55,6 @@ jobs:
         run: |
           echo "Verifying JAR in workspace:"
           ls -la
-          file ApiInmo-0.0.1-SNAPSHOT.jar || true
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -69,6 +68,7 @@ jobs:
         with:
           app-name: 'inmoapi'
           slot-name: 'Production'
-          package: './ApiInmo-0.0.1-SNAPSHOT.jar'
+          package: './app.jar'
+
 
 
