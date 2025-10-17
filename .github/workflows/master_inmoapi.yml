@@ -59,5 +59,7 @@ jobs:
         with:
           app-name: 'inmoapi'
           slot-name: 'Production'
-          package: '*.jar'
+          package: '${{ github.workspace }}/target/ApiInmo-0.0.1-SNAPSHOT.jar'
+
+
           
