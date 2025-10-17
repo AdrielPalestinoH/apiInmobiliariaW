@@ -24,11 +24,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: target/*.jar
+          path: target/ApiInmo-0.0.1-SNAPSHOT.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -38,14 +38,17 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
           path: .
 
-      - name: List files (debug)
-        run: ls -la
+      - name: Rename and move JAR to root (optional safeguard)
+        run: |
+          ls -la
+          mv target/ApiInmo-0.0.1-SNAPSHOT.jar ./ApiInmo-0.0.1-SNAPSHOT.jar || true
+          ls -la
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -59,4 +62,5 @@ jobs:
         with:
           app-name: 'inmoapi'
           slot-name: 'Production'
-          package: '*.jar'
+          package: ApiInmo-0.0.1-SNAPSHOT.jar
+
