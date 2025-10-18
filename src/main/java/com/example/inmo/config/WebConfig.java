@@ -13,14 +13,14 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
+                registry.addMapping("/**")
                         .allowedOrigins(
                             "http://localhost:4200",
-                            "https://calm-rock-0b41dac0f.1.azurestaticapps.net" // 🔹 dominio del frontend en Azure
+                            "https://calm-rock-0b41dac0f.1.azurestaticapps.net"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // opcional, útil si usas auth o cookies
+                        .allowCredentials(true);
             }
         };
     }
