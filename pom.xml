@@ -34,6 +34,11 @@
     <!-- 📦 Dependencias -->
     <dependencies>
 
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>1.5.6</version>
+		</dependency>
         <!-- MapStruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
