@@ -10,7 +10,6 @@ import java.util.List;
 
 @Configuration
 public class CorsGlobalConfig {
-
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
