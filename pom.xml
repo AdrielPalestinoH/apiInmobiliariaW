@@ -161,6 +161,19 @@
                     </excludes>
                 </configuration>
             </plugin>
+             <plugin>
+			      <groupId>org.springframework.boot</groupId>
+			      <artifactId>spring-boot-maven-plugin</artifactId>
+			      <configuration>
+			        <includeSystemScope>true</includeSystemScope>
+			        <requiresUnpack>
+			          <requireUnpack>
+			            <groupId>ch.qos.logback</groupId>
+			            <artifactId>logback-classic</artifactId>
+			          </requireUnpack>
+			        </requiresUnpack>
+			      </configuration>
+			    </plugin>
 
         </plugins>
     </build>
