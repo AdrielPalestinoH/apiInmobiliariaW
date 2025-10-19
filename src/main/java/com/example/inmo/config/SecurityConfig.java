@@ -35,17 +35,10 @@ public class SecurityConfig {
     }
 
     // 👇 Configuración global de CORS para todas las rutas /api/**
- // 👇 Configuración global de CORS para todas las rutas /api/**
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        
-        // ❌ CORRECCIÓN: Agregar el origen de Azure aquí
-        configuration.setAllowedOrigins(List.of(
-            "http://localhost:4200", 
-            "https://calm-rock-0b41dac0f.1.azurestaticapps.net" // ¡AGREGA ESTE!
-        ));
-        
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
