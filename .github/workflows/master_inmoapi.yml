@@ -2,8 +2,11 @@ name: Build and deploy JAR app to Azure Web App - inmoapi
 
 on:
   push:
+    # 🔑 ACTUALIZACIÓN: Dispara el workflow en las 3 ramas principales.
     branches:
-      - master
+      - main         # Rama de Producción
+      - qa           # Rama de QA (Quality Assurance)
+      - development  # Rama de Desarrollo
   workflow_dispatch:
 
 jobs:
@@ -28,6 +31,7 @@ jobs:
       - name: Rename JAR to app.jar
         run: |
           mkdir -p deploy
+          # Asegúrate de que el nombre del JAR generado sea correcto
           cp target/*.jar deploy/app.jar
           ls -la deploy/
 
@@ -44,6 +48,12 @@ jobs:
       id-token: write
       contents: read
 
+    # 🔑 ACTUALIZACIÓN: Define el ENTORNO LÓGICO para las aprobaciones (QA y Production)
+    environment:
+      # Lógica para seleccionar el entorno basado en la rama:
+      # Si es 'main', usa el entorno 'Production'. Si es 'qa', usa 'QA'. Si no, usa 'Development'.
+      name: ${{ github.ref == 'refs/heads/main' && 'Production' || github.ref == 'refs/heads/qa' && 'QA' || 'Development' }}
+
     steps:
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
@@ -59,6 +69,7 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
+          # Usando tus secrets existentes para la autenticación OIDC
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E65FF4176A1E4FDBAA825128B0F57B83 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3F53007499DA48449D94358198A741AF }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A83EBDAC1CA143D1B6DAE49BED031A8B }}
@@ -67,8 +78,9 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'inmoapi'
-          slot-name: 'Production'
+          # 🔑 ACTUALIZACIÓN: Asigna el SLOT DE DESPLIEGUE basado en la rama
+          # Si la rama es 'main', usa el slot 'production' (slot principal).
+          # Si la rama es 'qa', usa el slot 'staging'.
+          # Si es 'development', usa el slot 'dev'.
+          slot-name: ${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/qa' && 'staging' || 'dev' }}
           package: './app.jar'
-
-
-
